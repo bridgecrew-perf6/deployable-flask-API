@@ -6,12 +6,12 @@ import random
 db = SQLAlchemy()
 
 class User(db.Model):
-    id = db.column(db.Integer, primary_key=1)
-    username = db.column(db.String(80), unique=True, nullable=False)
-    email = db.column(db.String(80), unique=True, nullable=False)
-    password = db.column(db.Text(), nullable=False)
-    created_at = db.column(db.DateTime, default=datetime.now())
-    updated_at = db.column(db.DateTime, onupdate=datetime.now())
+    id = db.Column(db.Integer, primary_key=1)
+    username = db.Column(db.String(80), unique=True, nullable=False)
+    email = db.Column(db.String(80), unique=True, nullable=False)
+    password = db.Column(db.Text(), nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.now())
+    updated_at = db.Column(db.DateTime, onupdate=datetime.now())
     
     bookmarks = db.relationship('Bookmark', backref='user')
 
@@ -38,14 +38,14 @@ class User(db.Model):
         return 'User >>> {self.username}'
 
 class Bookmark(db.Model):
-    id = db.column(db.Integer, primary_key=1)
-    body = db.column(db.Text(), nullable=True)
-    url = db.column(db.Text(), nullable=False)
-    short_url = db.column(db.String(3), nullable=False)
-    vistits = db.column(db.Integer, default=0)
-    user_id = db.column(db.ForeignKey('user.id'))
-    created_at = db.column(db.DateTime, default=datetime.now())
-    updated_at = db.column(db.DateTime, onupdate=datetime.now())
+    id = db.Column(db.Integer, primary_key=1)
+    body = db.Column(db.Text(), nullable=True)
+    url = db.Column(db.Text(), nullable=False)
+    short_url = db.Column(db.String(3), nullable=False)
+    vistits = db.Column(db.Integer, default=0)
+    user_id = db.Column(db.ForeignKey('user.id'))
+    created_at = db.Column(db.DateTime, default=datetime.now())
+    updated_at = db.Column(db.DateTime, onupdate=datetime.now())
 
 
     def __repr__(self) -> str:
