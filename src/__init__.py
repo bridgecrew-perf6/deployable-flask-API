@@ -1,5 +1,7 @@
 from flask import Flask, jsonify
 import os 
+from src.auth import auth 
+from src.bookmarks import bookmarks
 
 def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
@@ -10,11 +12,9 @@ def create_app(test_config=None):
     else:
         app.config.from_mapping(test_config)
 
-    #Creating basic route
-    @app.get('/')
-    def index():
-        return jsonify({"message": "hello world"})
-    
+    app.register_blueprint(auth)
+    app.register_blueprint(bookmarks)
+
     return app
 
     
