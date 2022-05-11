@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, jsonify
 
 app = Flask(__name__)
 
@@ -6,4 +6,4 @@ app = Flask(__name__)
 
 @app.get('/')
 def index():
-    return 'hello world'
+    return jsonify({"message": "hello world"})
