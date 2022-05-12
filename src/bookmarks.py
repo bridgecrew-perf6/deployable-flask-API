@@ -1,14 +1,15 @@
+import json
 from flask import Blueprint, jsonify, request
 import validators 
 from src.constants import http_status_codes as sc
-from src.database import Bookmark, db
+from src.database import User, Bookmark, db
 from flask_jwt_extended import get_jwt_identity, jwt_required
 
 bookmarks = Blueprint(name="bookmarks", import_name=__name__, url_prefix="/api/v1/bookmarks")
 
 
 @bookmarks.route('/', methods=['POST', 'GET'])
-@jwt_required()
+@jwt_required() 
 def bookmarks_main():
     current_user_id = get_jwt_identity()
 
@@ -81,3 +82,61 @@ def bookmarks_main():
         else:
             return jsonify({'message': 'You do not have any bookmarks yet'}), sc.HTTP_204_NO_CONTENT
 
+@bookmarks.get('/<int:id>')
+@jwt_required()
+def get_bookmark_by_id(id):
+    current_user_id = get_jwt_identity()
+
+    bookmark = Bookmark.query.filter_by(user_id=current_user_id, id=id).first()
+    
+    if not bookmark:
+        return jsonify(
+            {
+                'error': 'bookmark not found'
+            }
+        ), sc.HTTP_404_NOT_FOUND
+
+    else:
+        return jsonify(
+            {
+                'id': bookmark.id, 
+                'url': bookmark.url,
+                'short_url': bookmark.short_url,
+                'visits': bookmark.visits,
+                'body': bookmark.body,
+                'created_at': bookmark.created_at,
+                'updated_at': bookmark.updated_at,
+            }
+        )
+
+@bookmarks.put('<int:id>')
+@bookmarks.patch('<int:id>')
+@jwt_required()
+def update_bookmark(id):
+    
+    current_user_id = get_jwt_identity()
+    bookmark = Bookmark.query.filter_by(user_id=current_user_id, id=id).first()
+    
+    if not bookmark:
+        return jsonify(
+            {
+                'error': 'bookmark not found'
+            }
+        ), sc.HTTP_404_NOT_FOUND
+
+    body = request.get_json().get('body', '')
+    url = request.get_json().get('url', '')
+
+    if not validators.url(url):
+        return jsonify({'error': 'Enter an valid URL'}), sc.HTTP_400_BAD_REQUEST
+    
+    if Bookmark.query.filter_by(url=url).first():
+        return jsonify({
+            'error': 'URL already exists'
+        }), sc.HTTP_409_CONFLICT
+
+    bookmark.url = url 
+    bookmark.body = body 
+    db.session.commit()
+
+    return jsonify({'message': 'bookmark updated successfuly'}), sc.HTTP_200_OK
