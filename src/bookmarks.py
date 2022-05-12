@@ -170,3 +170,29 @@ def delete_bookmark(id):
     return jsonify({
         'message': 'bookmark deleted successfuly'
     }), sc.HTTP_204_NO_CONTENT
+
+@bookmarks.get('/stats')
+@jwt_required()
+def get_stats():
+    current_user_id = get_jwt_identity()
+    items = Bookmark.query.filter_by(user_id=current_user_id).all()
+    
+    if not items: 
+        return jsonify({'error': 'you dont have any bookmarks yet' }), sc.HTTP_204_NO_CONTENT
+    
+    visits = []
+    total_visits = 0 
+    for item in items:
+        visits.append(item.visits)
+        total_visits = total_visits + item.visits
+
+    max_visits = max(visits)
+    min_visits = min(visits)
+
+    data = {
+        'total_visists': total_visits, 
+        'max_visits': max_visits,
+        'min_visits': min_visits
+    }
+       
+    return jsonify({'data': data}), sc.HTTP_200_OK
