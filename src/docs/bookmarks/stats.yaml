@@ -1,0 +1,18 @@
+Statistics about the post visits of a certain user
+---
+tags:
+  - Bookmarks
+parameters:
+  - in: header
+    name: Authorization
+    required: true 
+
+responses:
+  200:
+    description: Stats from the user
+  
+  204:
+    description: 0 results were found. 
+
+  401:
+    description: failed to get items due authentication error
