@@ -86,6 +86,7 @@ def bookmarks_main():
 
 @bookmarks.get('/<int:id>')
 @jwt_required()
+@swag_from('./docs/bookmarks/get_one.yaml')
 def get_bookmark_by_id(id):
     current_user_id = get_jwt_identity()
 
@@ -114,6 +115,7 @@ def get_bookmark_by_id(id):
 @bookmarks.put('/<int:id>')
 @bookmarks.patch('/<int:id>')
 @jwt_required()
+@swag_from('./docs/bookmarks/update.yaml')
 def update_bookmark(id):
     
     current_user_id = get_jwt_identity()
@@ -154,6 +156,7 @@ def update_bookmark(id):
 
 @bookmarks.delete('/<int:id>')
 @jwt_required()
+@swag_from('./docs/bookmarks/delete.yaml')
 def delete_bookmark(id):
     
     current_user_id = get_jwt_identity()

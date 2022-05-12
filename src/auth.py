@@ -85,6 +85,7 @@ def login():
 # ONLY SEND IF WE GET THE REQUEST WITH ACCESS TOKENS 
 @auth.get('/me')
 @jwt_required()
+@swag_from('./docs/auth/me.yaml')
 def me():
     user_id = get_jwt_identity()
     
@@ -103,6 +104,7 @@ def me():
 
 @auth.get('/token/refresh')
 @jwt_required(refresh=True)
+@swag_from('./docs/auth/refresh_token.yaml')
 def refresh_user_token():
     #TODO: not working propelly
     user_id = get_jwt_identity()
