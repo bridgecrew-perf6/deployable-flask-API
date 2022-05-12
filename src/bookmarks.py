@@ -109,8 +109,8 @@ def get_bookmark_by_id(id):
             }
         )
 
-@bookmarks.put('<int:id>')
-@bookmarks.patch('<int:id>')
+@bookmarks.put('/<int:id>')
+@bookmarks.patch('/<int:id>')
 @jwt_required()
 def update_bookmark(id):
     
@@ -150,7 +150,7 @@ def update_bookmark(id):
                                 'updated_at': bookmark.updated_at,
                             }}), sc.HTTP_200_OK
 
-@bookmarks.delete('<int:id>')
+@bookmarks.delete('/<int:id>')
 @jwt_required()
 def delete_bookmark(id):
     
