@@ -55,7 +55,8 @@ def create_app(test_config=None):
 
     @app.errorhandler(sc.HTTP_500_INTERNAL_SERVER_ERROR)
     def handler_500(e):
-        return jsonify({'error': f'sorry, you found an server error, we are working on it: {e}'}), sc.HTTP_500_INTERNAL_SERVER_ERROR
+        return jsonify({'message': 'sorry, you found an server error, we are working on it',
+        'error': e}), sc.HTTP_500_INTERNAL_SERVER_ERROR
 
 
 
