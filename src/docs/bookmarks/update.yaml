@@ -1,0 +1,42 @@
+Update existent bookmark from user
+---
+tags:
+  - Bookmarks
+parameters:
+  - in: header
+    name: Authorization
+    required: true
+  
+  - in: path
+    name: id
+    required: true
+
+  - name: body
+    in: body
+    description: Body must contain title or URL to be updated
+    required: true
+    schema: 
+      type: object
+      required:
+        - "url"
+      properties:
+        url:
+          type: "url"
+          format: url
+          example: "https://mynewsite.com"
+        body:
+          type: "string"
+          example: "Title of my new site"
+  
+responses:
+  200:
+    description: Bookmark updated successfully
+  
+  400:
+    description: Not able to read the sent information
+  
+  401:
+    description: Unauthorized access
+
+  404:
+    description: Bookmark not found
