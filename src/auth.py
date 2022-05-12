@@ -51,7 +51,15 @@ def register():
         }
     }), http_status_codes.HTTP_201_CREATED
 
-    
+@auth.post('/login')
+def login():
+    email = request.json.get('email', '')
+    password = request.json.get('password', '')    
+
+    user = User.query.filter_by(email=email).first()
+
+    if user:
+        is_pass_correct = check_password_hash(user.password, password)
 
 
 
