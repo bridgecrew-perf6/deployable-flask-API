@@ -101,6 +101,7 @@ def me():
 @auth.get('/token/refresh')
 @jwt_required(refresh=True)
 def refresh_user_token():
+    #TODO: not working propelly
     user_id = get_jwt_identity()
     access_token = create_access_token(identity=user_id)
 
