@@ -5,7 +5,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 import validators
 from src.constants import http_status_codes 
 from src.database import User, db
-from flask_jwt_extended import create_access_token, create_refresh_token
+from flask_jwt_extended import create_access_token, create_refresh_token, jwt_required, get_jwt_identity
 
 auth = Blueprint(name="auth", import_name=__name__, url_prefix="/api/v1/auth")
 
@@ -78,8 +78,20 @@ def login():
     return jsonify({'error': 'Wrong credentials'}), http_status_codes.HTTP_401_UNAUTHORIZED
 
 
-
-
+# ONLY SEND IF WE GET THE REQUEST WITH ACCESS TOKENS 
 @auth.get('/me')
+@jwt_required()
 def me():
-    return jsonify( user = "me")
+    user_id = get_jwt_identity()
+    
+    user = User.query.filter_by(id=user_id).first()
+    
+    if user:
+        return jsonify({
+            'user': {
+                'username': user.username, 
+                'email': user.email
+            }
+        }), http_status_codes.HTTP_200_OK
+    
+    return jsonify({'error': 'Could not understand request. Check your authentication token'}), http_status_codes.HTTP_400_BAD_REQUEST
