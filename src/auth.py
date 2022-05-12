@@ -5,6 +5,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 import validators
 from src.constants import http_status_codes 
 from src.database import User, db
+from flask_jwt_extended import create_access_token, create_refresh_token
 
 auth = Blueprint(name="auth", import_name=__name__, url_prefix="/api/v1/auth")
 
@@ -60,6 +61,22 @@ def login():
 
     if user:
         is_pass_correct = check_password_hash(user.password, password)
+
+        if is_pass_correct:
+            refresh = create_refresh_token(identity=user.id)
+            access = create_access_token(identity=user.id)
+
+            return jsonify({
+                'user': {
+                    'refresh': refresh,
+                    'access': access,
+                    'username': user.username,
+                    'email': user.email
+                }
+            }), http_status_codes.HTTP_200_OK
+
+    return jsonify({'error': 'Wrong credentials'}), http_status_codes.HTTP_401_UNAUTHORIZED
+
 
 
 
