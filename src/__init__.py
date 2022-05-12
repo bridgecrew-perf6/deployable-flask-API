@@ -5,6 +5,8 @@ from src.bookmarks import bookmarks
 from src.constants import http_status_codes as sc
 from src.database import Bookmark, db
 from flask_jwt_extended import JWTManager
+from flasgger import Swagger, swag_from
+from src.config.swagger import template, swagger_config
 
 
 def create_app(test_config=None):
@@ -16,6 +18,10 @@ def create_app(test_config=None):
             SQLALCHEMY_DATABASE_URI=os.environ.get('SQLALCHEMY_DB_URI'),
             SQLALCHEMY_TRACK_MODIFICATIONS=False,
             JWT_SECRET_KEY=os.environ.get('JWT_SECRET_KEY'),
+            SWAGGER = {
+                "title": "Flask Bookmarks API",
+                "uiversion": 3
+            }
         )
     else:
         app.config.from_mapping(test_config)
@@ -23,12 +29,17 @@ def create_app(test_config=None):
     db.app = app
     db.init_app(app)
 
+    Swagger(app=app, config=swagger_config, template=template)
+
+
     JWTManager(app)
 
     app.register_blueprint(auth)
     app.register_blueprint(bookmarks)
+
     
-    @app.get('/<short_url>')
+    @app.route('/<short_url>')
+    @swag_from('./docs/bookmarks/short_url.yaml')
     def redirect_to_url(short_url):
         bookmark = Bookmark.query.filter_by(short_url=short_url).first_or_404()
 
