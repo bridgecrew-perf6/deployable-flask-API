@@ -27,13 +27,13 @@ def bookmarks_main():
         bk = Bookmark(url=url, body=body, user_id=current_user_id)
         
         db.session.add(bk)
-        db.commit()
+        db.session.commit()
         
         return jsonify({
             'id': bk.id, 
             'url': bk.url,
             'short_url': bk.short_url,
-            'visits': bk.visits,
+            'vistits': bk.visits,
             'body': bk.body,
             'created_at': bk.created_at,
             'updated_at': bk.updated_at,
