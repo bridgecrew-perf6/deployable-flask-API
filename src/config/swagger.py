@@ -1,0 +1,42 @@
+swagger_config = {
+    "headers": [],
+    "specs": [
+        {
+            "endpoint": "apispec",
+            "route": "/apispec.json",
+            "rule_filter": lambda rule: True,
+            "model_filter": lambda tag: True 
+        }
+    ],
+    "static_url_path": "/flasgger_static",
+    "swagger_ui": True, 
+    "specs_route": "/"
+}
+
+template = {
+    "swagger": "2.0",
+    "info": {
+        "title": "Flask Bookmarks API",
+        "description": "CRUD bookmarks, create and auth users, uses JWTtokens",
+        "version": "1.0",
+        "contact": {
+            "responsableOrganization": "Lorena Miranda",
+            "responsibleDeveloper": "Lorena Miranda",
+            "email": "loremmiranda@gmail.com",
+            "url": "http://github.com/loristron"
+        },
+    },
+    "basePath": "/api/v1",
+    "schemes": [
+        "http",
+        "https"
+    ],
+    "securityDefinitions": {
+        "Bearer": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header",
+            "description": "JWT authorization using the Bearer shceme",
+        }
+    }
+}
