@@ -139,4 +139,34 @@ def update_bookmark(id):
     bookmark.body = body 
     db.session.commit()
 
-    return jsonify({'message': 'bookmark updated successfuly'}), sc.HTTP_200_OK
+    return jsonify({'message': 'bookmark updated successfuly',
+                    'data': {
+                                'id': bookmark.id, 
+                                'url': bookmark.url,
+                                'short_url': bookmark.short_url,
+                                'visits': bookmark.visits,
+                                'body': bookmark.body,
+                                'created_at': bookmark.created_at,
+                                'updated_at': bookmark.updated_at,
+                            }}), sc.HTTP_200_OK
+
+@bookmarks.delete('<int:id>')
+@jwt_required()
+def delete_bookmark(id):
+    
+    current_user_id = get_jwt_identity()
+    bookmark = Bookmark.query.filter_by(user_id=current_user_id, id=id).first()
+    
+    if not bookmark:
+        return jsonify(
+            {
+                'error': 'bookmark not found'
+            }
+        ), sc.HTTP_404_NOT_FOUND
+
+    db.session.delete(bookmark)
+    db.session.commit()
+
+    return jsonify({
+        'message': 'bookmark deleted successfuly'
+    }), sc.HTTP_204_NO_CONTENT
