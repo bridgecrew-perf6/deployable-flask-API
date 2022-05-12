@@ -1,0 +1,19 @@
+Get single Bookmark 
+--- 
+tags:
+  - Bookmarks
+parameters:
+  - in: header
+    name: Authorization
+    require: true
+  - in: path
+    name: id
+    required: true
+    schema: 
+      type: integer
+
+responses: 
+  200:
+    description: Bookmark returned
+  404:
+    description: Bookmark not found
