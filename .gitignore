@@ -1,2 +1,4 @@
 environment
 src/__pycache__
+src/constants/__pycache__
+src/bookmarks.db
