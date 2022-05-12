@@ -1,0 +1,19 @@
+Recieve information about the logged user
+--- 
+tags: 
+  - Authentication
+parameters:
+  - in: header
+    name: Authorization
+    required: true
+
+responses:
+  200:
+    description: User found
+  
+  401:
+    description: Not logged in 
+  
+  400:
+    description: Bad request
+  
