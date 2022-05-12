@@ -1,4 +1,5 @@
 import email
+import json
 from click import password_option
 from flask import Blueprint, jsonify, request
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -95,3 +96,14 @@ def me():
         }), http_status_codes.HTTP_200_OK
     
     return jsonify({'error': 'Could not understand request. Check your authentication token'}), http_status_codes.HTTP_400_BAD_REQUEST
+
+
+@auth.get('/token/refresh')
+@jwt_required(refresh=True)
+def refresh_user_token():
+    user_id = get_jwt_identity()
+    access_token = create_access_token(identity=user_id)
+
+    return json({
+        'access': access_token
+    }), http_status_codes.HTTP_200_OK
