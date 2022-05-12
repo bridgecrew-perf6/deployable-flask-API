@@ -41,9 +41,16 @@ def bookmarks_main():
 
     else: 
         # return bookmarks created by the user
-        bks = Bookmark.query.filter_by(user_id=current_user_id)
+
+        #get pagination variables 
+        page = request.args.get('page', 1, type=int)
+        per_page = request.args.get('per_page', 5, type=int)
+
+        #WITHOUT PAGINATION: bks = Bookmark.query.filter_by(user_id=current_user_id)
+        bookmarks = Bookmark.query.filter_by(user_id=current_user_id).paginate(page=page, per_page=per_page)
+
         data = []
-        for bk in bks:
+        for bk in bookmarks.items:
             data.append(
                 {
                     'id': bk.id, 
@@ -55,9 +62,21 @@ def bookmarks_main():
                     'updated_at': bk.updated_at,
                 }
             )
+        
+        meta = {
+            "current_page": bookmarks.page,
+            "pages": bookmarks.pages,
+            "total_count": bookmarks.total,
+            "has_prev": bookmarks.has_prev,
+            "prev_page": bookmarks.prev_num, 
+            "has_next": bookmarks.has_next,
+            "next_page": bookmarks.next_num,
+        }
+        
         if len(data) is not 0:
             return jsonify({
-                'bookmarks': data
+                'bookmarks': data, 
+                "meta": meta
             }), sc.HTTP_200_OK
         else:
             return jsonify({'message': 'You do not have any bookmarks yet'}), sc.HTTP_204_NO_CONTENT
