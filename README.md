@@ -13,4 +13,7 @@ deployable-flask-API
 - If you want to delete the database, use: 
 ```db.drop_all()```
 
+# Available
+- Project available at https://flaskbookmarker-api.herokuapp.com/
+
 
