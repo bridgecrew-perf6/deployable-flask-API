@@ -12,6 +12,7 @@ from flasgger import swag_from
 auth = Blueprint(name="auth", import_name=__name__, url_prefix="/api/v1/auth")
 
 @auth.post('/register')
+@swag_from('./docs/auth/register.yaml')
 def register():
     
     username = request.json['username']
