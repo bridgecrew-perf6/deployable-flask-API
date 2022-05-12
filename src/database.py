@@ -27,13 +27,6 @@ class User(db.Model):
         else:
             return pick
 
-
-
-    def __init__(self, **kwargs) -> None:
-        super().__init__(**kwargs)
-        
-        self.short_url = self.generate_short_characters()
-
     def __repr__(self) -> str:
         return 'User >>> {self.username}'
 
@@ -50,6 +43,12 @@ class Bookmark(db.Model):
 
     def __repr__(self) -> str:
         return 'Bookmark >>> {self.url}'
+
+    
+    def __init__(self, **kwargs) -> None:
+        super().__init__(**kwargs)
+        
+        self.short_url = self.generate_short_characters()
 
 
     
