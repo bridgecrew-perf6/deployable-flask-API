@@ -1,0 +1,21 @@
+Delete bookmark
+---
+tags:
+  - Bookmarks
+parameters:
+  - in: header
+    name: Authorization
+    required: true
+  
+  - in: path
+    name: id
+    required: true
+    shema:
+      type: integer
+
+responses: 
+  204: 
+    description: Bookmark deleted
+  
+  404: 
+    description: Bookmark not found
