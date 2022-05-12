@@ -1,0 +1,59 @@
+List all or add new bookmarks linked to a certain user 
+---
+tags:
+  - Bookmarks
+get:
+  parameters:
+    - in: header
+      name: Authorization
+      required: true
+  
+  responses:
+    200:
+      description: Get the bookmarks list from the logged in user
+
+    401:
+      description: Unauthorized 
+
+post:
+  parameters:
+    - in: query
+      name: page
+      schema:
+        type: integer
+      description: The page to be shown
+    
+    - in: query
+      name: per_page
+      schema:
+        type: integer
+      description: Itens per page 
+    
+    - in: header
+      name: Authorization
+      required: true
+    
+    - name: body
+      description: The body should contain bookmark data
+      in: body
+      required: true
+      schema:
+        type: object
+        required:
+          - "url"
+        properties:
+          url:
+            type: "url"
+            format: "url"
+            example: "https://www.mysite.com/"
+          body:
+            type: "string"
+            example: "My Site"
+
+responses: 
+  201:
+    description: Bookmark created
+  
+  400:
+    description: Unreadable data
+
