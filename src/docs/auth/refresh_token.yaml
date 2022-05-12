@@ -1,0 +1,15 @@
+Refresh access token 
+--- 
+tags:
+  - Authentication
+paremeters:
+  - summary: The authentication header must be an refresh token
+    in: header
+    name: Authorization
+    required: true
+
+responses: 
+  200:
+    description: Token refreshed successfuly
+  401:
+    description: Unauthorized access
